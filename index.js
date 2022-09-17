@@ -89,9 +89,16 @@ module.exports.RavenBlockTemplate = function(rpcData, poolAddress) {
       0xFFFFFFFF, 0xFFFFFFFF,
       Buffer.concat([serializedBlockHeight, Buffer.alloc(17, 0xCC)]) // 17 bytes
     );
-
+   
     txCoinbase.addOutput(scriptCompile(poolAddrHash), Math.floor(rpcData.coinbasevalue));
-
+ 
+    var strCommunityAutonomousAddress 		= rpcData.CommunityAutonomousAddress;
+    var strCommunityAutonomousAddressHash 	= bitcoin.address.fromBase58Check(strCommunityAutonomousAddress).hash;
+    txCoinbase.addOutput(
+        scriptCompile(strCommunityAutonomousAddressHash),
+        Math.floor(rpcData.CommunityAutonomousValue)
+    );
+    
     if (rpcData.default_witness_commitment) {
       txCoinbase.addOutput(Buffer.from(rpcData.default_witness_commitment, 'hex'), 0);
     }
