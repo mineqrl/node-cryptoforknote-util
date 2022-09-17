@@ -156,6 +156,8 @@ module.exports.RavenBlockTemplate = function(rpcData, poolAddress) {
     height:             rpcData.height,
     bits:               rpcData.bits,
     prev_hash:          rpcData.previousblockhash,
+    CommunityAutonomousAddress: rpcData.CommunityAutonomousAddress,
+    CommunityAutonomousValue: rpcData.CommunityAutonomousValue,
   };
 };
 
