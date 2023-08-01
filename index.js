@@ -123,9 +123,9 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
         txCoinbase.addOutput(scriptCompile(poolAddrHash), minerreward);
 
 
-        if (rpcData.default_witness_commitment) {
-            txCoinbase.addOutput(Buffer.from(rpcData.default_witness_commitment, 'hex'), 0);
-        }
+//        if (rpcData.default_witness_commitment) {
+//            txCoinbase.addOutput(Buffer.from(rpcData.default_witness_commitment, 'hex'), 0);
+//        }
     }
 
     let header = Buffer.alloc(80);
