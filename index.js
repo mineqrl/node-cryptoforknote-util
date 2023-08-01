@@ -110,7 +110,6 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
                 for (let x in rpcData.smartnode) {
                     let payee = rpcData.smartnode[x]
                     let reward = payee.amount;
-                    txCoinbase.version = 03000500
                     txCoinbase.addOutput(
                         scriptCompile(bitcoin.address.fromBase58Check(payee.payee).hash),
                         reward
