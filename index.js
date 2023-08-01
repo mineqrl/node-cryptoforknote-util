@@ -68,7 +68,7 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
     const poolAddrHash = bitcoin.address.fromBase58Check(poolAddress).hash;
     let minerreward;
     let txCoinbase = new bitcoin.Transaction();
-    txCoinbase.version = 0x03000500;
+    txCoinbase.version = 0x050003;
     let bytesHeight;
     { // input for coinbase tx
         let blockHeightSerial = rpcData.height.toString(16).length % 2 === 0 ?
@@ -82,14 +82,12 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
             reverseBuffer(Buffer.from(blockHeightSerial, 'hex')),
             Buffer.from('00', 'hex') // OP_0
         ]);
-        txCoinbase.version = 03000500;
         txCoinbase.addInput(
             // will be used for our reserved_offset extra_nonce
             Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'),
             0xFFFFFFFF, 0xFFFFFFFF,
             Buffer.concat([serializedBlockHeight, Buffer.alloc(17, 0xCC)]) // 17 bytes
         );
-        txCoinbase.version = 03000500;
         minerreward = rpcData.coinbasevalue;
 
 //    txCoinbase.addOutput(scriptCompile(poolAddrHash), Math.floor(rpcData.coinbasevalue));
@@ -102,7 +100,6 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
 //        Math.floor(rpcData.CommunityAutonomousValue)
 //    );
         if (rpcData.founder) {
-            txCoinbase.version = 03000500
             txCoinbase.addOutput(scriptCompile(bitcoin.address.fromBase58Check(rpcData.founder.payee).hash), Math.floor(rpcData.founder.amount))
         }
         minerreward -= rpcData.founder.amount;
@@ -114,7 +111,7 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
                     let payee = rpcData.smartnode[x]
                     let reward = payee.amount;
                     txCoinbase.version = 03000500
-                    tx.addOutput(
+                    txCoinbase.addOutput(
                         scriptCompile(bitcoin.address.fromBase58Check(payee.payee).hash),
                         reward
                     );
@@ -127,7 +124,6 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
 
 
         if (rpcData.default_witness_commitment) {
-            txCoinbase.version = 03000500;
             txCoinbase.addOutput(Buffer.from(rpcData.default_witness_commitment, 'hex'), 0);
         }
     }
