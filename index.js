@@ -127,6 +127,11 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
 //        }
     }
 
+    txHex = txCoinbase.toHex();
+    if (rpcData.coinbase_payload.length > 0) {
+        txHex += '46'+rpcData.coinbase_payload;
+    }
+
     let header = Buffer.alloc(80);
   { let position = 0;
         header.writeUInt32BE(rpcData.height, position, 4);                  // height         42-46
@@ -145,7 +150,7 @@ module.exports.RavenBlockTemplate = function (rpcData, poolAddress) {
         varuint.encode(rpcData.transactions.length + 1, Buffer.alloc(varuint.encodingLength(rpcData.transactions.length + 1)), 0)
     ]);
     const offset1 = blob.length;
-    blob = Buffer.concat([blob, Buffer.from(txCoinbase.toHex(), 'hex')]);
+    blob = Buffer.concat([blob, Buffer.from(txHex, 'hex')]);
 
     rpcData.transactions.forEach(function (value) {
         blob = Buffer.concat([blob, Buffer.from(value.data, 'hex')]);
