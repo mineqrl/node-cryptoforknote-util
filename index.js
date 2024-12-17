@@ -57,6 +57,7 @@ function hash256_3(buffer) {
 
 function transaction_hash(transaction, forWitness) {
   if (forWitness && transaction.isCoinbase()) return Buffer.alloc(32, 0);
+  console.log(transaction);
   return hash256(transaction.__toBuffer(undefined, undefined, forWitness));
 }
 
