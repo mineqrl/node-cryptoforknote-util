@@ -6,6 +6,7 @@ const bitcoin = require('bitcoinjs-lib');
 const varuint = require('varuint-bitcoin');
 const crypto  = require('crypto');
 const fastMerkleRoot = require('merkle-lib/fastRoot');
+const merkleTree = require('merkle-lib');
 
 const rtm = require('cryptoforknote-util/rtm');
 
@@ -65,11 +66,19 @@ function transaction_hash3(transaction, forWitness) {
 }
 
 function getMerkleRoot(transactions, transaction_hash_func, detectWitness) {
-  if (transactions.length === 0) return Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')
+  if (transactiogetMerkleTreens.length === 0) return Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')
   const forWitness = detectWitness ? txesHaveWitnessCommit(transactions) : false;
   const hashes = transactions.map(transaction => transaction_hash_func(transaction, forWitness));
   const rootHash = fastMerkleRoot(hashes, hash256);
   return forWitness ? hash256(Buffer.concat([rootHash, transactions[0].ins[0].witness[0]])) : rootHash;
+}
+function getMerkleTree(transactions, transaction_hash_func, detectWitness) {
+  if (transactions.length === 0) return Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')
+  const forWitness = detectWitness ? txesHaveWitnessCommit(transactions) : false;
+  const hashes = transactions.map(transaction => transaction_hash_func(transaction, forWitness));
+  const _merkleTree = merkleTree(hashes, hash256);
+  return _merkleTree;
+  //return forWitness ? hash256(Buffer.concat([rootHash, transactions[0].ins[0].witness[0]])) : rootHash;
 }
 
 let last_epoch_number;
@@ -234,7 +243,7 @@ module.exports.ErgBlockTemplate = function(rpcData) {
 };
 
 module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
-  var merkle = getMerkleRoot(rpcData.transactions, transaction_hash, true)
+  var merkle = getMerkleTree(rpcData.transactions, transaction_hash, true)
   return rtm.RtmBlockTemplate(rpcData, poolAddress, merkle);
 };
 
