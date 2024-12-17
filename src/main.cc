@@ -5,8 +5,8 @@
 #include <stdint.h>
 #include <string>
 #include <algorithm>
-#include "cryptonote_core/cryptonote_basic.h"
-#include "cryptonote_core/cryptonote_format_utils.h"
+#include "cryptonote_basic/cryptonote_basic.h"
+#include "cryptonote_basic/cryptonote_format_utils.h"
 #include "common/base58.h"
 #include "serialization/binary_utils.h"
 #include <nan.h>
@@ -145,7 +145,7 @@ NAN_METHOD(convert_blob) { // (parentBlockBuffer, cnBlobType)
 
     block b = AUTO_VAL_INIT(b);
     b.set_blob_type(blob_type);
-    if (!parse_and_validate_block_from_blob(input, b)) return THROW_ERROR_EXCEPTION("Failed to parse block");
+    if (!parse_and_validate_block_from_blob(input, b)) return THROW_ERROR_EXCEPTION("Failed to parse block 2");
 
     if (blob_type == BLOB_TYPE_FORKNOTE2) {
         block parent_block;

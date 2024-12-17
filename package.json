@@ -1,7 +1,6 @@
 {
   "name": "cryptoforknote-util",
-  "version": "12.0.0",
-  "main": "cryptoforknote-util",
+  "version": "15.6.1",
   "author": {
     "name": "LucasJones",
     "email": "lucasjonesdev@hotmail.co.uk"
@@ -11,15 +10,16 @@
     "url": "https://github.com/haven-protocol-org/node-cryptoforknote-util.git"
   },
   "dependencies": {
-    "promise": "*",
-    "bindings": "*",
-    "nan": "^2.14.2",
-    "bignum": "^0.13.1",
-    "sha3": "*",
     "base58-native": "*",
-    "varuint-bitcoin": "^1.0.4",
+    "bech32": "*",
+    "bignum": "^0.13.1",
+    "bindings": "*",
+    "bitcoinjs-lib": "git+https://github.com/MoneroOcean/bitcoinjs-lib.git",
     "merkle-lib": "^2.0.10",
-    "bitcoinjs-lib": "*"
+    "nan": "^2.20.0",
+    "promise": "*",
+    "sha3": "*",
+    "varuint-bitcoin": "^1.0.4"
   },
   "keywords": [
     "cryptonight",
