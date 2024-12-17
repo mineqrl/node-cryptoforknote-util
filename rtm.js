@@ -320,7 +320,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
     version: packInt32BE(rpcData.version).toString('hex'),
     bits: rpcData.bits,
     curtime: packUInt32BE(rpcData.curtime).toString('hex'),
-    merkleBranch:merkle
-
+    merkleBranch:merkle,
+    rpcData:rpcData
   }
 }
