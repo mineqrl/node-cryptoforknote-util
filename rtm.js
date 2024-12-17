@@ -318,7 +318,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
     reserved_offset:    80 + txn.length + blob1.length,
     transactions: [blob1,blob2],
     version: packInt32BE(rpcData.version).toString('hex'),
-    bits: rpcData.curtime,
+    bits: rpcData.bits,
     curtime: packUInt32BE(rpcData.curtime).toString('hex'),
     merkleBranch:merkle
 
