@@ -2,7 +2,7 @@ const bignum  = require('bignum');
 const base58  = require('base58-native');
 const bech32  = require('bech32');
 const bitcoin = require('bitcoinjs-lib');
-
+const fastMerkleRoot = require('merkle-lib/fastRoot');
 const diff1 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
 
 function reverseBuffer(buff) {
@@ -227,7 +227,7 @@ function generateTransactionOutputs(rpcData, poolAddress) {
   return Buffer.concat([ varIntBuffer(rpcData.default_witness_commitment ? txOutputBuffers.length - 1 : txOutputBuffers.length), Buffer.concat(txOutputBuffers)]);
 }
 
-module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
+module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
   const extraNoncePlaceholderLength = 17;
   const coinbaseVersion = rpcData.coinbasedevreward ? Buffer.concat([packUInt16LE(1), packUInt16LE(0)]) : Buffer.concat([packUInt16LE(3), packUInt16LE(5)]);
 
@@ -294,8 +294,20 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
       console.error("Skip RTM v1 tx: " + tx.data);
     }
   });
+
+  sha256 = function(buffer){
+    var hash1 = crypto.createHash('sha256');
+    hash1.update(buffer);
+    return hash1.digest();
+  };
+
+  sha256d = function(buffer){
+    return sha256(sha256(buffer));
+  };
   const txn = varIntBuffer(txs.length + 1);
 
+  // merkleTree  = merkleRoot(rpcData.transactions,merkleJoin)
+  // merkleBranch = getMerkleHashes(merkleTree);
   return {
     difficulty:         parseFloat((diff1 / bignum(rpcData.target, 16).toNumber()).toFixed(9)),
     height:             rpcData.height,
@@ -303,6 +315,12 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
     blocktemplate_blob: version + prev_hash + Buffer.alloc(32, 0).toString('hex') + curtime + bits.toString('hex') + Buffer.alloc(4, 0).toString('hex') +
                         txn.toString('hex') + blob1.toString('hex') + Buffer.alloc(extraNoncePlaceholderLength, 0xCC).toString('hex') + blob2.toString('hex')  +
                         Buffer.concat(txs.map(function(tx) { return Buffer.from(tx.data, 'hex'); })).toString('hex'),
-    reserved_offset:    80 + txn.length + blob1.length
+    reserved_offset:    80 + txn.length + blob1.length,
+    transactions: [blob1,blob2],
+    version: packInt32BE(rpcData.version).toString('hex'),
+    bits: rpcData.curtime,
+    curtime: packUInt32BE(rpcData.curtime).toString('hex'),
+    merkleBranch:merkle
+
   }
 }

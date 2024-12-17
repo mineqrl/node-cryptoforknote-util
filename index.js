@@ -234,7 +234,8 @@ module.exports.ErgBlockTemplate = function(rpcData) {
 };
 
 module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
-  return rtm.RtmBlockTemplate(rpcData, poolAddress);
+  var merkle = getMerkleRoot(rpcData.transactions, transaction_hash, true)
+  return rtm.RtmBlockTemplate(rpcData, poolAddress, merkle);
 };
 
 module.exports.convertRtmBlob = function(blobBuffer) {
