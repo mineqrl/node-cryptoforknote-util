@@ -74,7 +74,7 @@ function getMerkleRoot(transactions, transaction_hash_func, detectWitness) {
   return forWitness ? hash256(Buffer.concat([rootHash, transactions[0].ins[0].witness[0]])) : rootHash;
 }
 function getMerkleTree(transactions, transaction_hash_func, detectWitness) {
-  if (transactions.length === 0) return [Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')]
+  if (transactions.length === 0) return []
   const forWitness = detectWitness ? txesHaveWitnessCommit(transactions) : false;
   const hashes = transactions.map(transaction => transaction_hash_func(transaction, forWitness));
   const _merkleTree = merkleTree(hashes, hash256);
