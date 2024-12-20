@@ -277,6 +277,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
   let bits = Buffer.from(rpcData.bits, 'hex');
   bits.writeUInt32LE(bits.readUInt32BE());
   let txs = [];
+  let btc_txs = [];
   // skip version 1 transaction because they contain some OP_RETURN(0x6A) opcode in the beginning of
   // tx input scripts instead of size of script part so not sure how to parse them
   // just drop them for now
@@ -284,7 +285,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
   rpcData.transactions.forEach(function(tx) {
     if (tx.version != 1) {
       try {
-        bitcoin.Transaction.fromBuffer(Buffer.from(tx.data, 'hex'), false, false);
+        btc_txs.push(bitcoin.Transaction.fromBuffer(Buffer.from(tx.data, 'hex'), false, false));
       } catch(err) {
         console.error("Skip RTM tx due to parse error: " + tx.data);
         return; // skip transaction if it is not parsed OK (varint coding seems to be different for RTM)
@@ -320,7 +321,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
     version: packInt32BE(rpcData.version).toString('hex'),
     bits: rpcData.bits,
     curtime: packUInt32BE(rpcData.curtime).toString('hex'),
-    transactions: txs,
+    transactions: btc_txs,
     rpcData:rpcData
   }
 }
