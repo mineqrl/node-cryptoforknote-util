@@ -245,7 +245,7 @@ module.exports.ErgBlockTemplate = function(rpcData) {
 
 module.exports.RtmBlockTemplate = function(rpcData, poolAddress) {
   var block =  rtm.RtmBlockTemplate(rpcData, poolAddress);
-  var merkle = getMerkleTree(block.transactions, transaction_hash, true)
+  var merkle = getMerkleTree(block.btc_transactions, transaction_hash, true)
   block.merkleBranch =merkle;
   return block;
 };

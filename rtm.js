@@ -321,7 +321,7 @@ module.exports.RtmBlockTemplate = function(rpcData, poolAddress, merkle) {
     version: packInt32BE(rpcData.version).toString('hex'),
     bits: rpcData.bits,
     curtime: packUInt32BE(rpcData.curtime).toString('hex'),
-    transactions: btc_txs,
+    btc_transactions: btc_txs,
     rpcData:rpcData
   }
 }
