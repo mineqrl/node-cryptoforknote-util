@@ -3,7 +3,7 @@ const base58  = require('base58-native');
 const bech32  = require('bech32');
 const bitcoin = require('bitcoinjs-lib');
 const fastMerkleRoot = require('merkle-lib/fastRoot');
-const diff1 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+const diff1 = 0x00000000ffff0000000000000000000000000000000000000000000000000000;
 
 function reverseBuffer(buff) {
   let reversed = Buffer.alloc(buff.length);
